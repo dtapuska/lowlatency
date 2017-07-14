@@ -1,0 +1,39 @@
+<pre class='metadata'>
+Title: lowlatency
+Shortname: lowlatency
+Level: 1
+Status: CG-DRAFT
+Group: WICG
+URL: https://raw.githubusercontent.com/dtapuska/lowlatency/master/index.html
+Editor: Dave Tapuska, Chromium https://chromium.org, dtapuska@chromium.org
+Abstract: This standard describes an extension to AddEventListenerOptions that indicates applications wish to receive low latency input.
+</pre>
+
+<pre class='anchors'>
+url: https://github.com/atotic/event-loop/; type: dfn;
+    text: event-loop
+url: https://w3c.github.io/pointerevents/#the-pointermove-event; type: dfn;
+    text: pointermove
+url: https://w3c.github.io/uievents/#event-type-mousemove; type: dfn;
+    text: mousemove
+url: https://w3c.github.io/touch-events/#event-touchmove; type: dfn;
+    text: touchmove
+</pre>
+
+
+Introduction {#intro}
+================
+<em>This section is non-normative.</em>
+
+Input events such as [=pointermove=], [=mousemove=] and [=touchmove=] may be dispatched at an appropriate time to reduce the amount of unncessary work. Reducing the amount of work comes at a cost of increasing latency sometimes. This increase in latency may not be a desirable side effect for some applications. Adding the ability for an application to indicate that they require low latency input is desired.
+
+<code>lowlatency</code> {#lowlatency}
+=========
+
+<pre class=idl>
+partial dictionary AddEventListenerOptions {
+  boolean lowlatency = false;
+};
+</pre>
+
+As described in the [=event-loop=] explainer continuous events MAY be held and dispatched in the render part of the event loop. Indicating <code>lowlatency: true</code> SHOULD cause these continuous events to be dispatched right away instead of waiting on the render part of the event loop. Setting {{AddEventListenerOptions/lowlatency}} on non-continuous events MUST NOT have any event on processing.
